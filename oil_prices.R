@@ -55,9 +55,8 @@
            retry < retry_threshold & 
            difftime(Sys.time(), retry_time) < retry_timeout) {
       retry <- retry + 1
+      raw_crude_pricing <- GET(EIA_url)
     }    
-#  
-    raw_crude_pricing <- GET(EIA_url)
 #
 # if we still fail, then read historical data
 #
@@ -72,6 +71,7 @@
       crude_dates <- crude_history[, "date"]
       crude_pricing <- crude_history[, "price"]
       rm(crude_history)
+      gc()
     } else {
 #  
       parsed_crude_pricing <- fromJSON(content(raw_crude_pricing, 
